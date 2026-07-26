@@ -1,0 +1,78 @@
+Class Window1 Inherits Window
+
+  Sub btnGoToHomePage_MouseDown(x As Double, y As Double, button As MouseButton)
+# HTMLViewer1.LoadURL("https://product-download.4d.com")
+
+Browser.LoadURL("https://samplelib.com/sample-docx.html")
+
+
+  End Sub
+  Sub btnFillCredentials_MouseDown(x As Double, y As Double, button As MouseButton)
+Var js As String
+
+js = "emailInput = document.getElementById('store2018_login_email');passwordInput = document.getElementById('store2018_login_password');emailInput.value = 'milan@clearviewsys.com';passwordInput.value = 'scar*sole2CAUSES';"
+
+Browser.ExecuteJavaScript(js)
+
+  End Sub
+  Sub btnDownload_MouseDown(x As Double, y As Double, button As MouseButton)
+
+# HTMLViewer1.LoadURL("https://product-download.4d.com/release/20.x/20.6/101680/mac/tool4d_x86_64.tar.xz")
+
+
+Var js As String
+
+js = "const a = document.createElement('a'); a.href = 'https://product-download.4d.com/release/20.x/20.6/101680/mac/tool4d_x86_64.tar.xz'; a.click();"
+
+
+Browser.ExecuteJavaScript(js)
+
+
+  End Sub
+  Sub Browser_NavigationFinished(url As String, success As Boolean)
+URL_Display.Text = Browser.Source
+
+  End Sub
+  Sub Browser_Opening()
+
+# HTMLViewer1.DownloadPolicy = HTMLViewerDownloadPolicy.DownloadsFolder
+# Browser.DownloadPolicy = HTMLViewerDownloadPolicy.DownloadsFolder
+# Browser.LoadURL("https://product-download.4d.com")
+Browser.LoadURL("https://samplelib.com/sample-docx.html")
+
+
+  End Sub
+  Function Browser_DownloadRequested(download As HTMLViewerDownload) As Boolean
+Var fileName As String = download.SuggestedFileName
+Var destination As FileSystemItem = SpecialFolder.Downloads.Child(fileName)
+
+If SpecialFolder.Downloads <> Nothing Then
+
+
+
+
+download.SaveTo(destination)
+
+End If
+
+Return False
+  End Function
+  Sub Browser_DownloadFinished(download As HTMLViewerDownload)
+Select Case download.State
+
+Case HTMLViewerDownloadState.Completed
+
+If download.Destination <> Nothing Then
+
+MessageBox("Download ok")
+
+End If
+
+Case HTMLViewerDownloadState.Failed
+
+MessageBox("Download failed")
+
+End Select
+
+  End Sub
+End Class

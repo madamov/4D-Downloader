@@ -1,0 +1,15 @@
+{
+  "Version": 2,
+  "Name": "MainMenuBar",
+  "Id": "dae06d27-a90f-41c4-aba0-42016db91a57",
+  "Kind": "MenuBar",
+  "Namespace": "",
+  "Folder": "",
+  "ParentModule": "",
+  "ParentModuleId": "",
+  "AvailableInDesigner": false,
+  "CodeFile": "MainMenuBar-dae06d27.objobasic",
+  "LayoutFile": "MainMenuBar-dae06d27.layout.xml",
+  "Notes": [],
+  "InspectorBehaviour": []
+}

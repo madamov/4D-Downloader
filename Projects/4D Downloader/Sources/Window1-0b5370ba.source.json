@@ -1,0 +1,15 @@
+{
+  "Version": 2,
+  "Name": "Window1",
+  "Id": "0b5370ba-3478-452c-a902-9b8dc42ccbc8",
+  "Kind": "Window",
+  "Namespace": "",
+  "Folder": "",
+  "ParentModule": "",
+  "ParentModuleId": "",
+  "AvailableInDesigner": false,
+  "CodeFile": "Window1-0b5370ba.objobasic",
+  "LayoutFile": "Window1-0b5370ba.layout.xml",
+  "Notes": [],
+  "InspectorBehaviour": []
+}

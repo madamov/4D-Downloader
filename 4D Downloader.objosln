@@ -1,0 +1,17 @@
+{
+  "Version": 2,
+  "Id": "b943ad1f-a699-45b8-a820-cba7dc455d13",
+  "Name": "4D Downloader",
+  "LastSavedStudioVersion": "26.7.5",
+  "ActiveProject": "4D Downloader",
+  "Projects": [
+    {
+      "Id": "3f9338f4-7192-4230-a3b5-865a77f18a97",
+      "Path": "Projects/4D Downloader",
+      "Name": "4D Downloader",
+      "Type": "Desktop"
+    }
+  ],
+  "EmptyFolders": [],
+  "AiCustomInstructions": ""
+}
