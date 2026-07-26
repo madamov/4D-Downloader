@@ -5,7 +5,7 @@ on:
 
 jobs:
   publish-windows:
-    uses: madamov/ObjoPublisher/.github/workflows/publish_objo_windows.yml@v1
+    uses: madamov/ObjoPublisher/.github/workflows/publish_objo_windows.yml@main
 
     with:
       solution-file: "4D Downloader.objosln"
