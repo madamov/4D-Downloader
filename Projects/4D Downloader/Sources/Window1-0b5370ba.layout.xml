@@ -1,7 +1,8 @@
-<Window width="952" height="672" title="Window1" menuBar="MainMenuBar" platform="macos">
+<Window width="952" height="672" title="Window1" menuBar="MainMenuBar" platform="windows">
   <Button name="btnGoToHomePage" x="760" y="72" width="156" height="48" text="Products download" />
-  <TextField name="URL_Display" x="16" y="0" width="719.21484375" height="32" text="" readOnly="true" />
+  <TextField name="URL_Display" x="16" y="0" width="384" height="32" text="" enabled="false" readOnly="true" />
   <Button name="btnFillCredentials" x="760" y="144" width="156" height="48" text="Fill credentials" />
   <Button name="btnDownload" x="760" y="240" width="156" height="48" text="Download" />
   <HTMLViewer name="Browser" x="20" y="42" width="696" height="610" lockBottom="true" />
+  <TextField name="Status" x="416" y="0" width="384" height="32" text="" enabled="false" readOnly="true" />
 </Window>
