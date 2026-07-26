@@ -1,11 +1,11 @@
 Class Window1 Inherits Window
 
   Sub btnGoToHomePage_MouseDown(x As Double, y As Double, button As MouseButton)
-# HTMLViewer1.LoadURL("https://product-download.4d.com")
-
-Browser.LoadURL("https://samplelib.com/sample-docx.html")
 
 
+# Browser.LoadURL("https://samplelib.com/sample-docx.html")
+
+Browser.LoadURL("https://product-download.4d.com")
   End Sub
   Sub btnFillCredentials_MouseDown(x As Double, y As Double, button As MouseButton)
 Var js As String
@@ -16,9 +16,6 @@ Browser.ExecuteJavaScript(js)
 
   End Sub
   Sub btnDownload_MouseDown(x As Double, y As Double, button As MouseButton)
-
-# HTMLViewer1.LoadURL("https://product-download.4d.com/release/20.x/20.6/101680/mac/tool4d_x86_64.tar.xz")
-
 
 Var js As String
 
@@ -37,8 +34,8 @@ URL_Display.Text = Browser.Source
 
 # HTMLViewer1.DownloadPolicy = HTMLViewerDownloadPolicy.DownloadsFolder
 # Browser.DownloadPolicy = HTMLViewerDownloadPolicy.DownloadsFolder
-# Browser.LoadURL("https://product-download.4d.com")
-Browser.LoadURL("https://samplelib.com/sample-docx.html")
+Browser.LoadURL("https://product-download.4d.com")
+# Browser.LoadURL("https://samplelib.com/sample-docx.html")
 
 
   End Sub
