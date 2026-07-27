@@ -5,7 +5,8 @@ on:
 
 jobs:
   publish-windows:
-    uses: madamov/ObjoPublisher/.github/workflows/publish_objo_windows.yml@main
+    # uses: madamov/ObjoPublisher/.github/workflows/publish_objo_windows.yml@main
+    uses: madamov/ObjoPublisher/.github/workflows/publish_objo_windows.yml@3-windows-workflows-requires-signing-information-make-them-optional
 
     with:
       solution-file: "4D Downloader.objosln"
