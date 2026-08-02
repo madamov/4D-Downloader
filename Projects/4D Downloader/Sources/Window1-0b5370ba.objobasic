@@ -50,7 +50,13 @@ Case "https://account.4d.com/en/login.shtml"
 
 print("Filling credentials")
 
-js = "emailInput = document.getElementById('store2018_login_email');passwordInput = document.getElementById('store2018_login_password');emailInput.value = 'milan@clearviewsys.com';passwordInput.value = 'scar*sole2CAUSES';"
+Var account As String = GetProperty(App.Account4D, "account")
+Var password As String = GetProperty(App.Password4D, "password")
+
+js = "emailInput = document.getElementById('store2018_login_email');"
+js = js + "passwordInput = document.getElementById('store2018_login_password');"
+js = js + "emailInput.Value = '" + account + "';"
+js = js + "passwordInput.Value = '" + password + "';"
 
 Browser.ExecuteJavaScript(js)
 
@@ -66,13 +72,6 @@ Case "https://account.4d.com/"
 print("logged in")
 
 Browser.LoadURL("https://product-download.4d.com")
-
-
-#Var myjs As String
-
-#myjs = "const a = document.createElement('a'); a.href = 'https://product-download.4d.com/release/21.x/21.1/100547/win/4D%2021.1%20LTS%20Windows.exe'; a.click();"
-
-# Browser.ExecuteJavaScript(myjs)
 
 
 Case "https://product-download.4d.com/"
@@ -92,13 +91,9 @@ End Select
   End Sub
   Sub Browser_Opening()
 
-# HTMLViewer1.DownloadPolicy = HTMLViewerDownloadPolicy.DownloadsFolder
+
 Browser.DownloadPolicy = HTMLViewerDownloadPolicy.DownloadsFolder
 Browser.LoadURL("https://account.4d.com/en/login.shtml")
-
-# Browser.LoadURL("https://product-download.4d.com")
-# Browser.LoadURL("https://samplelib.com/sample-docx.html")
-
 
   End Sub
   Function Browser_DownloadRequested(download As HTMLViewerDownload) As Boolean
@@ -151,6 +146,8 @@ If download.TotalBytes > 0 Then
 
 
 Status.Text = download.BytesReceived.ToString() + " of " + download.TotalBytes.ToString()
+
+print(Status.Text)
 
 Else
 

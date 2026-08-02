@@ -1,3 +1,34 @@
 Class App Inherits DesktopApplication
 
+  Event Opening(args() As String)
+Var parser As New CommandLineParser("Pass your 4D account and password.")
+
+parser.AppVersion = Application.Version
+
+parser.AddStringOption("username", "u", "4D Account")
+parser.AddStringOption("password", "p", "Your 4D account password")
+
+Var ok As Boolean = parser.Parse(args)
+
+If ok Then
+
+Var account As String = parser.StringValue("username")
+Var password As String = parser.StringValue("password")
+
+SetProperty(Account4D, "account", account)
+SetProperty(Password4D, "password", password)
+
+Else
+
+For Each msg As String In parser.Errors
+System.ErrorPrint(msg)
+Next
+
+# System.Quit(1)
+
+End If
+
+  End Event
+  Public Shared Property Account4D As String
+  Public Shared Property Password4D As String
 End Class
