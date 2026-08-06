@@ -1,8 +1,9 @@
 {
-  "Version": 2,
+  "Version": 3,
   "Name": "Window1",
   "Id": "0b5370ba-3478-452c-a902-9b8dc42ccbc8",
   "Kind": "Window",
+  "BuildScope": "Application",
   "Namespace": "",
   "Folder": "",
   "ParentModule": "",

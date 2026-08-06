@@ -10,12 +10,18 @@ Browser.LoadURL("https://product-download.4d.com")
   Sub btnFillCredentials_MouseDown(x As Double, y As Double, button As MouseButton)
 Var js As String
 
-js = "emailInput = document.getElementById('store2018_login_email');passwordInput = document.getElementById('store2018_login_password');emailInput.value = 'milan@clearviewsys.com';passwordInput.value = 'scar*sole2CAUSES';"
-
+# fill email field
+js = "emailInput = document.getElementById('store2018_login_email');"
+js = js + "emailInput.value = '" + App.Account4D + "';"
 Browser.ExecuteJavaScript(js)
 
-js = "loginButton = document.getElementById('store2018_login_btnLogin'); loginButton.click();"
+#fill password field
+js = "passwordInput = document.getElementById('store2018_login_password');"
+js = js + "passwordInput.value = '" + App.Password4D + "';"
+Browser.ExecuteJavaScript(js)
 
+#click on Login button
+js = "loginButton = document.getElementById('store2018_login_btnLogin'); loginButton.click();"
 Browser.ExecuteJavaScript(js)
 
 Var loginLink As String = "https://account.4d.com/4DACTION/webAccount_Login?lang=en&returnURL=https%3A//product-download.4d.com/"
@@ -50,13 +56,10 @@ Case "https://account.4d.com/en/login.shtml"
 
 print("Filling credentials")
 
-Var account As String = GetProperty(App.Account4D, "account")
-Var password As String = GetProperty(App.Password4D, "password")
-
 js = "emailInput = document.getElementById('store2018_login_email');"
 js = js + "passwordInput = document.getElementById('store2018_login_password');"
-js = js + "emailInput.Value = '" + account + "';"
-js = js + "passwordInput.Value = '" + password + "';"
+js = js + "emailInput.value = '" + App.Account4D
+js = js + "'; passwordInput.value = '" + App.Password4D + "';"
 
 Browser.ExecuteJavaScript(js)
 
@@ -101,9 +104,6 @@ Var fileName As String = download.SuggestedFileName
 Var destination As FileSystemItem = SpecialFolder.Downloads.Child(fileName)
 
 If SpecialFolder.Downloads <> Nothing Then
-
-
-
 
 download.SaveTo(destination)
 

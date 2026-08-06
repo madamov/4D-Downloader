@@ -1,8 +1,9 @@
 {
-  "Version": 2,
+  "Version": 3,
   "Name": "App",
   "Id": "01227664-ed14-4503-aeb5-7920d94788ed",
   "Kind": "Class",
+  "BuildScope": "Application",
   "Namespace": "",
   "Folder": "",
   "ParentModule": "",

@@ -3,6 +3,21 @@ Class App Inherits DesktopApplication
   Event Opening(args() As String)
 Var parser As New CommandLineParser("Pass your 4D account and password.")
 
+
+@If DebugBuild Then
+
+Var myFile As FileSystemItem = New FileSystemItem("/Volumes/Radni/madamov/Documents_local/login_info.json")
+Var jsonString As String = myFile.ReadAllText()
+Var json As JSONItem = JSONItem.Parse(jsonString)
+
+Var password As String = json.Value("password").StringValue
+Var account As String = json.Value("account").StringValue
+
+App.Account4D = account
+App.Password4D = password
+
+@Else
+
 parser.AppVersion = Application.Version
 
 parser.AddStringOption("username", "u", "4D Account")
@@ -11,12 +26,17 @@ parser.AddStringOption("password", "p", "Your 4D account password")
 Var ok As Boolean = parser.Parse(args)
 
 If ok Then
+Print("in ok")
 
 Var account As String = parser.StringValue("username")
 Var password As String = parser.StringValue("password")
 
-SetProperty(Account4D, "account", account)
-SetProperty(Password4D, "password", password)
+print("about to set properties")
+
+App.Account4D = account
+App.Password4D = password
+
+print("properties set")
 
 Else
 
@@ -27,6 +47,8 @@ Next
 # System.Quit(1)
 
 End If
+
+@EndIf
 
   End Event
   Public Shared Property Account4D As String
