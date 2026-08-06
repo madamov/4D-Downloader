@@ -44,7 +44,7 @@ For Each msg As String In parser.Errors
 System.ErrorPrint(msg)
 Next
 
-# System.Quit(1)
+System.Quit(1)
 
 End If
 
