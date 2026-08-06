@@ -12,9 +12,11 @@ Var json As JSONItem = JSONItem.Parse(jsonString)
 
 Var password As String = json.Value("password").StringValue
 Var account As String = json.Value("account").StringValue
+Var fileList As JSONItem = json.Value("filelist")
 
 App.Account4D = account
 App.Password4D = password
+App.fileList = fileList
 
 @Else
 
@@ -22,7 +24,7 @@ parser.AppVersion = Application.Version
 
 parser.AddStringOption("username", "u", "4D Account")
 parser.AddStringOption("password", "p", "Your 4D account password")
-
+parser.AddStringOption("filelist", "l", "JSON listing files to download")
 Var ok As Boolean = parser.Parse(args)
 
 If ok Then
@@ -31,12 +33,17 @@ Print("in ok")
 Var account As String = parser.StringValue("username")
 Var password As String = parser.StringValue("password")
 
-print("about to set properties")
-
 App.Account4D = account
 App.Password4D = password
 
-print("properties set")
+Var jsonTxt As String = parser.StringValue("filelist")
+
+If jsonTxt.Length > 0 Then
+Var json As JSONItem = JSONItem.Parse(jsonText)
+App.fileList = json
+End If
+
+End If
 
 Else
 
@@ -51,6 +58,8 @@ End If
 @EndIf
 
   End Event
-  Public Shared Property Account4D As String
-  Public Shared Property Password4D As String
+  Public Property Account4D As String
+  Public Property Password4D As String
+  Public Property fileList As JSONItem
+  Public Shared Property filesDownloaded As Integer = 0
 End Class
