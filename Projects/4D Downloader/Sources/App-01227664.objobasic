@@ -28,7 +28,7 @@ parser.AddStringOption("filelist", "l", "JSON listing files to download")
 Var ok As Boolean = parser.Parse(args)
 
 If ok Then
-Print("in ok")
+Print("in ok, about to get credentials")
 
 Var account As String = parser.StringValue("username")
 Var password As String = parser.StringValue("password")
@@ -36,9 +36,12 @@ Var password As String = parser.StringValue("password")
 App.Account4D = account
 App.Password4D = password
 
+
+
 Var jsonTxt As String = parser.StringValue("filelist")
 
 If jsonTxt.Length > 0 Then
+Print("Account " + account + " will download: " + jsonText)
 Var json As JSONItem = JSONItem.Parse(jsonText)
 App.fileList = json
 End If
