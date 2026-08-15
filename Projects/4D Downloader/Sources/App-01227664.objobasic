@@ -46,8 +46,6 @@ Var json As JSONItem = JSONItem.Parse(jsonText)
 App.fileList = json
 End If
 
-End If
-
 Else
 
 For Each msg As String In parser.Errors
@@ -57,6 +55,10 @@ Next
 System.Quit(1)
 
 End If
+
+End If
+
+
 
 @EndIf
 
