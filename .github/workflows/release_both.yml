@@ -57,16 +57,16 @@ jobs:
 
     steps:
       - name: Check out application repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Download macOS artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: downloder4d-macos-publish
           path: downloaded-artifacts/downloder4d-macos-publish
 
       - name: Download Windows artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: 4ddownloader-windows-publish
           path: downloaded-artifacts/4ddownloader-windows-publish
