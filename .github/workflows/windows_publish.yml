@@ -1,17 +1,15 @@
-name: ObjoPublisher for Windows
+name: Publish for Windows
 
 on:
   workflow_dispatch:
 
 jobs:
   publish-windows:
-    # uses: madamov/ObjoPublisher/.github/workflows/publish_objo_windows.yml@main
-    uses: madamov/ObjoPublisher/.github/workflows/publish_objo_windows.yml@3-windows-workflows-requires-signing-information-make-them-optional
-
+    uses: madamov/ObjoPublisher/.github/workflows/publish_objo_windows.yml@v1
     with:
       solution-file: "4D Downloader.objosln"
       project-file: "Projects/4D Downloader/project.json"
-      application-name: MyGreatApp
+      application-name: 4D Downloader
       artifact-name: 4ddownloader-windows-publish
       output-directory: Publish
       targets: win-x64
