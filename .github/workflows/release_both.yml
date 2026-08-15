@@ -1,0 +1,98 @@
+name: Publish for macOS
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publish-macos:
+    uses: madamov/ObjoPublisher/.github/workflows/publish_objo_macos.yml@v1
+    
+    with:
+      solution-file: 4D Downloader.objosln
+      project-file: Projects/4D Downloader/project.json
+      application-name: My Downloader
+      artifact-name: downloder4d-macos-publish
+      apple-notary-profile: downloder4d-notarization
+      # targets: osx-x64
+
+      # Optional. Leave this out to detect the latest version.
+      # objo-version: 26.7.1
+
+    secrets:
+      apple-certificate: ${{ secrets.APPLE_CERTIFICATE }}
+      apple-certificate-password: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+      apple-app-specific-password: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+      objo-license: ${{ secrets.OBJO_LICENSE }}
+      apple-certificate-name: ${{ secrets.APPLE_CERTIFICATE_NAME }}
+      apple-team-id: ${{ secrets.APPLE_TEAM_ID }}
+      apple-id: ${{ secrets.APPLE_ID }}
+
+  download-macos-artifact:
+    name: Download published macOS artifacts
+    needs: publish-macos
+    runs-on: macos-latest
+
+    steps:
+      - name: Download macOS artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: downloder4d-macos-publish
+          path: downloaded-artifacts/downloder4d-macos-publish
+
+      - name: Show downloaded files
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          echo "Downloaded artifact contents:"
+          find downloaded-artifacts \
+            -type f \
+            -print
+
+      - name: Show file details
+        shell: bash
+        run: |
+          ls -lhR downloaded-artifacts
+
+  publish-windows:
+    uses: madamov/ObjoPublisher/.github/workflows/publish_objo_windows.yml@v1
+    with:
+      solution-file: "4D Downloader.objosln"
+      project-file: "Projects/4D Downloader/project.json"
+      application-name: Downloader4DWin
+      artifact-name: 4ddownloader-windows-publish
+      output-directory: Publish
+      targets: win-x64
+
+      # Optional. Leave this out to detect the latest version.
+      # objo-version: 26.7.1
+
+
+    secrets:
+      objo-license: ${{ secrets.OBJO_LICENSE }}
+
+  download-windows-artifact:
+    name: Download and upload published Windows artifact
+    needs: publish-windows
+    runs-on: windows-latest
+
+    steps:
+      - name: Download Windows artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: 4ddownloader-windows-publish
+          path: downloaded-artifacts\4ddownloader-windows-publish
+
+      - name: Show downloaded files
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+
+          Write-Host "Downloaded artifact contents:"
+
+          Get-ChildItem `
+            -Path "downloaded-artifacts" `
+            -Recurse `
+            -File |
+            Select-Object FullName, Length |
+            Format-Table -AutoSize
