@@ -10,7 +10,7 @@ jobs:
     with:
       solution-file: 4D Downloader.objosln
       project-file: Projects/4D Downloader/project.json
-      application-name: Downloader4D
+      application-name: 4D Downloader
       artifact-name: downloder4d-macos-publish
       apple-notary-profile: downloder4d-notarization
       # targets: osx-x64
