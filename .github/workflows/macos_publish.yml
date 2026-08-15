@@ -1,0 +1,34 @@
+name: ObjoPublisher for macOS
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publish-macos:
+    uses: madamov/ObjoPublisher/.github/workflows/publish_objo_macos.yml@v1
+    
+    with:
+      solution-file: 4D Downloader.objosln
+      project-file: Projects/4D Downloader/project.json
+      application-name: Downloader4D
+      artifact-name: downloder4d-macos-publish
+      apple-notary-profile: downloder4d-notarization
+      # targets: osx-x64
+
+      # Optional. Leave this out to detect the latest version.
+      # objo-version: 26.7.1
+
+    secrets:
+      apple-certificate: ${{ secrets.APPLE_CERTIFICATE }}
+      apple-certificate-password: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+      apple-app-specific-password: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+      objo-license: ${{ secrets.OBJO_LICENSE }}
+      apple-certificate-name: ${{ secrets.APPLE_CERTIFICATE_NAME }}
+      apple-team-id: ${{ secrets.APPLE_TEAM_ID }}
+      apple-id: ${{ secrets.APPLE_ID }}
+
+  download-macos-artifact:
+    name: Download published macOS artifacts
+    needs: publish-macos
+    runs-on: macos-latest
+
