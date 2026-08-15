@@ -37,12 +37,11 @@ App.Account4D = account
 App.Password4D = password
 
 
-
 Var jsonTxt As String = parser.StringValue("filelist")
 
 If jsonTxt.Length > 0 Then
-Print("Account " + account + " will download: " + jsonText)
-Var json As JSONItem = JSONItem.Parse(jsonText)
+Print("Account " + account + " will download: " + jsonTxt)
+Var json As JSONItem = JSONItem.Parse(jsonTxt)
 App.fileList = json
 End If
 
