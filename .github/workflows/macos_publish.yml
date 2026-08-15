@@ -10,7 +10,7 @@ jobs:
     with:
       solution-file: 4D Downloader.objosln
       project-file: Projects/4D Downloader/project.json
-      application-name: 4D Downloader
+      application-name: Downloader4D
       artifact-name: downloder4d-macos-publish
       apple-notary-profile: downloder4d-notarization
       # targets: osx-x64
@@ -36,8 +36,8 @@ jobs:
       - name: Download macOS artifacts
         uses: actions/download-artifact@v4
         with:
-          name: mygreatapp-macos-publish
-          path: downloaded-artifacts/mygreatapp-macos-publish
+          name: downloder4d-macos-publish
+          path: downloaded-artifacts/downloder4d-macos-publish
 
       - name: Show downloaded files
         shell: bash
