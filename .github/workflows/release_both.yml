@@ -5,14 +5,131 @@ on:
 
 permissions:
   contents: write
+  pull-requests: read
 
 jobs:
+  prepare-release:
+    name: Prepare release metadata
+    runs-on: ubuntu-latest
+
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      tag: ${{ steps.version.outputs.tag }}
+
+    steps:
+      - name: Check out release branch
+        uses: actions/checkout@v7
+        with:
+          ref: release
+          fetch-depth: 0
+
+      - name: Determine next version
+        id: version
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          project_file="Projects/4D Downloader/project.json"
+
+          gh release list \
+            --exclude-drafts \
+            --exclude-pre-releases \
+            --limit 1 \
+            --json tagName,publishedAt \
+            > "$RUNNER_TEMP/previous-release.json"
+
+          previous_tag="$(jq -r '.[0].tagName // empty' "$RUNNER_TEMP/previous-release.json")"
+          since="$(jq -r '.[0].publishedAt // "1970-01-01T00:00:00Z"' "$RUNNER_TEMP/previous-release.json")"
+
+          gh pr list \
+            --base release \
+            --state merged \
+            --limit 1000 \
+            --json number,title,url,mergedAt,author,labels \
+            > "$RUNNER_TEMP/merged-prs.json"
+
+          jq \
+            --arg since "$since" \
+            '[.[] | select(.mergedAt > $since)] | sort_by(.mergedAt)' \
+            "$RUNNER_TEMP/merged-prs.json" \
+            > "$RUNNER_TEMP/release-prs.json"
+
+          if [[ -z "$previous_tag" ]]; then
+            version="1.0.0"
+          else
+            major="$(jq -er '.BuildSettings.MajorVersion | numbers' "$project_file")"
+            minor="$(jq -er '.BuildSettings.MinorVersion | numbers' "$project_file")"
+            patch="$(jq -er '.BuildSettings.PatchVersion | numbers' "$project_file")"
+
+            if jq -e '
+              any(
+                .[];
+                any(.labels[]?; (.name | ascii_downcase) == "enhancement" or (.name | ascii_downcase) == "feature")
+              )
+            ' "$RUNNER_TEMP/release-prs.json" > /dev/null; then
+              version="${major}.$((minor + 1)).0"
+            else
+              version="${major}.${minor}.$((patch + 1))"
+            fi
+          fi
+
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "tag=v$version" >> "$GITHUB_OUTPUT"
+          echo "previous_tag=$previous_tag" >> "$GITHUB_OUTPUT"
+          echo "Next release version: $version"
+
+      - name: Create release notes
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          VERSION: ${{ steps.version.outputs.version }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          previous_tag="${{ steps.version.outputs.previous_tag }}"
+
+          {
+            echo "# 4D Downloader $VERSION"
+            echo
+            echo "## What's changed"
+            echo
+
+            if [[ "$(jq length "$RUNNER_TEMP/release-prs.json")" -eq 0 ]]; then
+              echo "No pull requests were merged into the release branch since the previous release."
+            else
+              jq -r \
+                '.[] | "- \(.title) ([#\(.number)](\(.url))) by @\(.author.login)"' \
+                "$RUNNER_TEMP/release-prs.json"
+            fi
+
+            echo
+
+            if [[ -n "$previous_tag" ]]; then
+              echo "**Full changelog:** [$previous_tag...v$VERSION](https://github.com/$GH_REPO/compare/$previous_tag...v$VERSION)"
+            fi
+          } > RELEASE_NOTES.md
+
+          cat RELEASE_NOTES.md
+
+      - name: Upload release metadata
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-metadata
+          path: RELEASE_NOTES.md
+          if-no-files-found: error
+
   publish-macos:
+    needs: prepare-release
     uses: madamov/ObjoPublisher/.github/workflows/publish_objo_macos.yml@v1
     
     with:
       solution-file: 4D Downloader.objosln
       project-file: Projects/4D Downloader/project.json
+      app-version: ${{ needs.prepare-release.outputs.version }}
       application-name: My Downloader
       artifact-name: downloder4d-macos-publish
       apple-notary-profile: downloder4d-notarization
@@ -31,11 +148,14 @@ jobs:
       apple-id: ${{ secrets.APPLE_ID }}
 
   publish-windows:
-    needs: publish-macos
+    needs:
+      - prepare-release
+      - publish-macos
     uses: madamov/ObjoPublisher/.github/workflows/publish_objo_windows.yml@v1
     with:
       solution-file: "4D Downloader.objosln"
       project-file: "Projects/4D Downloader/project.json"
+      app-version: ${{ needs.prepare-release.outputs.version }}
       application-name: Downloader4DWin
       artifact-name: 4ddownloader-windows-publish
       output-directory: Publish
@@ -51,6 +171,7 @@ jobs:
   release-both:
     name: Create GitHub release
     needs:
+      - prepare-release
       - publish-macos
       - publish-windows
     runs-on: ubuntu-latest
@@ -71,15 +192,52 @@ jobs:
           name: 4ddownloader-windows-publish
           path: downloaded-artifacts/4ddownloader-windows-publish
 
-      - name: Create release and upload artifacts
+      - name: Download release metadata
+        uses: actions/download-artifact@v8
+        with:
+          name: release-metadata
+          path: downloaded-artifacts/release-metadata
+
+      - name: Prepare distribution packages
         env:
-          GH_TOKEN: ${{ github.token }}
-          RELEASE_TAG: run-${{ github.run_id }}
+          VERSION: ${{ needs.prepare-release.outputs.version }}
         shell: bash
         run: |
           set -euo pipefail
 
-          mapfile -d '' release_files < <(find downloaded-artifacts -type f -print0)
+          notes="downloaded-artifacts/release-metadata/RELEASE_NOTES.md"
+          mkdir -p distribution/macos distribution/windows
+
+          cp "$notes" distribution/macos/RELEASE_NOTES.md
+          cp "$notes" distribution/windows/RELEASE_NOTES.md
+
+          find downloaded-artifacts/downloder4d-macos-publish \
+            -type f \
+            -exec cp {} distribution/macos/ \;
+
+          find downloaded-artifacts/4ddownloader-windows-publish \
+            -type f \
+            -exec cp {} distribution/windows/ \;
+
+          (
+            cd distribution/macos
+            zip -9 -r "../4D-Downloader-${VERSION}-macOS.zip" .
+          )
+
+          (
+            cd distribution/windows
+            zip -9 -r "../4D-Downloader-${VERSION}-Windows.zip" .
+          )
+
+      - name: Create release and upload artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ needs.prepare-release.outputs.tag }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          mapfile -d '' release_files < <(find distribution -maxdepth 1 -type f -print0)
 
           if (( ${#release_files[@]} == 0 )); then
             echo "No files were found in the downloaded artifacts." >&2
@@ -87,6 +245,7 @@ jobs:
           fi
 
           gh release create "$RELEASE_TAG" \
-            --title "Build ${{ github.run_id }}" \
-            --notes "Automated release from workflow run ${{ github.run_id }}." \
+            --target release \
+            --title "4D Downloader ${{ needs.prepare-release.outputs.version }}" \
+            --notes-file downloaded-artifacts/release-metadata/RELEASE_NOTES.md \
             "${release_files[@]}"
