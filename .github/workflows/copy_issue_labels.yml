@@ -1,0 +1,77 @@
+name: Copy linked issue labels to pull request
+
+on:
+  pull_request_target:
+    types:
+      - opened
+    branches:
+      - master
+
+permissions:
+  contents: read
+  issues: read
+  pull-requests: write
+
+jobs:
+  copy-labels:
+    name: Copy labels
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Copy labels from linked issues
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const query = `
+              query($owner: String!, $repo: String!, $number: Int!) {
+                repository(owner: $owner, name: $repo) {
+                  pullRequest(number: $number) {
+                    closingIssuesReferences(first: 100) {
+                      nodes {
+                        number
+                        labels(first: 100) {
+                          nodes {
+                            name
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            `;
+
+            const variables = {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              number: context.issue.number,
+            };
+
+            const result = await github.graphql(query, variables);
+            const linkedIssues =
+              result.repository.pullRequest.closingIssuesReferences.nodes;
+
+            if (linkedIssues.length === 0) {
+              core.info('No linked issues were found.');
+              return;
+            }
+
+            const labels = [...new Set(
+              linkedIssues.flatMap((issue) =>
+                issue.labels.nodes.map((label) => label.name)
+              )
+            )];
+
+            if (labels.length === 0) {
+              core.info('The linked issues have no labels to copy.');
+              return;
+            }
+
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels,
+            });
+
+            core.info(`Copied labels: ${labels.join(', ')}`);
