@@ -1,7 +1,10 @@
-name: Publish for macOS
+name: Publish for macOS and Windows
 
 on:
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   publish-macos:
@@ -27,34 +30,8 @@ jobs:
       apple-team-id: ${{ secrets.APPLE_TEAM_ID }}
       apple-id: ${{ secrets.APPLE_ID }}
 
-  download-macos-artifact:
-    name: Download published macOS artifacts
-    needs: publish-macos
-    runs-on: macos-latest
-
-    steps:
-      - name: Download macOS artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: downloder4d-macos-publish
-          path: downloaded-artifacts/downloder4d-macos-publish
-
-      - name: Show downloaded files
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          echo "Downloaded artifact contents:"
-          find downloaded-artifacts \
-            -type f \
-            -print
-
-      - name: Show file details
-        shell: bash
-        run: |
-          ls -lhR downloaded-artifacts
-
   publish-windows:
+    needs: publish-macos
     uses: madamov/ObjoPublisher/.github/workflows/publish_objo_windows.yml@v1
     with:
       solution-file: "4D Downloader.objosln"
@@ -71,28 +48,42 @@ jobs:
     secrets:
       objo-license: ${{ secrets.OBJO_LICENSE }}
 
-  download-windows-artifact:
-    name: Download and upload published Windows artifact
-    needs: publish-windows
-    runs-on: windows-latest
+  release-both:
+    name: Create GitHub release
+    needs:
+      - publish-macos
+      - publish-windows
+    runs-on: ubuntu-latest
 
     steps:
+      - name: Download macOS artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: downloder4d-macos-publish
+          path: downloaded-artifacts/downloder4d-macos-publish
+
       - name: Download Windows artifact
         uses: actions/download-artifact@v4
         with:
           name: 4ddownloader-windows-publish
-          path: downloaded-artifacts\4ddownloader-windows-publish
+          path: downloaded-artifacts/4ddownloader-windows-publish
 
-      - name: Show downloaded files
-        shell: pwsh
+      - name: Create release and upload artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: run-${{ github.run_id }}
+        shell: bash
         run: |
-          $ErrorActionPreference = "Stop"
+          set -euo pipefail
 
-          Write-Host "Downloaded artifact contents:"
+          mapfile -d '' release_files < <(find downloaded-artifacts -type f -print0)
 
-          Get-ChildItem `
-            -Path "downloaded-artifacts" `
-            -Recurse `
-            -File |
-            Select-Object FullName, Length |
-            Format-Table -AutoSize
+          if (( ${#release_files[@]} == 0 )); then
+            echo "No files were found in the downloaded artifacts." >&2
+            exit 1
+          fi
+
+          gh release create "$RELEASE_TAG" \
+            --title "Build ${{ github.run_id }}" \
+            --notes "Automated release from workflow run ${{ github.run_id }}." \
+            "${release_files[@]}"
