@@ -133,10 +133,6 @@ jobs:
       application-name: My Downloader
       artifact-name: downloder4d-macos-publish
       apple-notary-profile: downloder4d-notarization
-      # targets: osx-x64
-
-      # Optional. Leave this out to detect the latest version.
-      # objo-version: 26.7.1
 
     secrets:
       apple-certificate: ${{ secrets.APPLE_CERTIFICATE }}
@@ -160,10 +156,6 @@ jobs:
       artifact-name: 4ddownloader-windows-publish
       output-directory: Publish
       targets: win-x64
-
-      # Optional. Leave this out to detect the latest version.
-      # objo-version: 26.7.1
-
     secrets:
       objo-license: ${{ secrets.OBJO_LICENSE }}
 
