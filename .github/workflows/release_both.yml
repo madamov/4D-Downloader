@@ -197,37 +197,6 @@ jobs:
           name: release-metadata
           path: downloaded-artifacts/release-metadata
 
-      - name: Prepare distribution packages
-        env:
-          VERSION: ${{ needs.prepare-release.outputs.version }}
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          notes="downloaded-artifacts/release-metadata/RELEASE_NOTES.md"
-          mkdir -p distribution/macos distribution/windows
-
-          cp "$notes" distribution/macos/RELEASE_NOTES.md
-          cp "$notes" distribution/windows/RELEASE_NOTES.md
-
-          find downloaded-artifacts/downloder4d-macos-publish \
-            -type f \
-            -exec cp {} distribution/macos/ \;
-
-          find downloaded-artifacts/4ddownloader-windows-publish \
-            -type f \
-            -exec cp {} distribution/windows/ \;
-
-          (
-            cd distribution/macos
-            zip -9 -r "../4D-Downloader-${VERSION}-macOS.zip" .
-          )
-
-          (
-            cd distribution/windows
-            zip -9 -r "../4D-Downloader-${VERSION}-Windows.zip" .
-          )
-
       - name: Create release and upload artifacts
         env:
           GH_TOKEN: ${{ github.token }}
@@ -236,7 +205,20 @@ jobs:
         run: |
           set -euo pipefail
 
-          mapfile -d '' release_files < <(find distribution -maxdepth 1 -type f -print0)
+          mapfile -d '' release_files < <(
+            find downloaded-artifacts/4ddownloader-windows-publish \
+              -type f \
+              -print0
+          )
+
+          while IFS= read -r -d '' dmg; do
+            release_files+=("$dmg")
+          done < <(
+            find downloaded-artifacts/downloder4d-macos-publish \
+              -type f \
+              -iname '*.dmg' \
+              -print0
+          )
 
           if (( ${#release_files[@]} == 0 )); then
             echo "No files were found in the downloaded artifacts." >&2
