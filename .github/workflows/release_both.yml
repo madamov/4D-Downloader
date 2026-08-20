@@ -116,7 +116,7 @@ jobs:
           cat RELEASE_NOTES.md
 
       - name: Upload release metadata
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: release-metadata
           path: RELEASE_NOTES.md
@@ -124,11 +124,15 @@ jobs:
 
   publish-macos:
     needs: prepare-release
-    uses: madamov/ObjoPublisher/.github/workflows/publish_objo_macos.yml@v1
+    uses: madamov/ObjoPublisher/.github/workflows/publish_objo_macos.yml@22-add-input-to-publishing-workflows-to-cope-set-of-files-into-resourcesfiles-folder
     
     with:
       solution-file: 4D Downloader.objosln
       project-file: Projects/4D Downloader/project.json
+      resource-files: |
+        buildFiles/avatar_62.png
+        buildFiles/avatar_20082.jpg
+      resource-artifact-name: release-metadata
       app-version: ${{ needs.prepare-release.outputs.version }}
       application-name: My Downloader
       artifact-name: downloder4d-macos-publish
@@ -147,10 +151,14 @@ jobs:
     needs:
       - prepare-release
       - publish-macos
-    uses: madamov/ObjoPublisher/.github/workflows/publish_objo_windows.yml@v1
+    uses: madamov/ObjoPublisher/.github/workflows/publish_objo_windows.yml@22-add-input-to-publishing-workflows-to-cope-set-of-files-into-resourcesfiles-folder
     with:
       solution-file: "4D Downloader.objosln"
       project-file: "Projects/4D Downloader/project.json"
+      resource-files: |
+        buildFiles/avatar_62.png
+        buildFiles/avatar_20082.jpg
+      resource-artifact-name: release-metadata
       app-version: ${{ needs.prepare-release.outputs.version }}
       application-name: Downloader4DWin
       artifact-name: 4ddownloader-windows-publish
