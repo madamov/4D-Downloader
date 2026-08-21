@@ -164,6 +164,7 @@ jobs:
       artifact-name: 4ddownloader-windows-publish
       output-directory: Publish
       targets: win-x64
+      windows-format: zip
     secrets:
       objo-license: ${{ secrets.OBJO_LICENSE }}
 
