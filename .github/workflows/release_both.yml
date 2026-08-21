@@ -134,7 +134,7 @@ jobs:
         buildFiles/avatar_20082.jpg
       resource-artifact-name: release-metadata
       app-version: ${{ needs.prepare-release.outputs.version }}
-      application-name: My Downloader
+      application-name: 4D_Downloader
       artifact-name: downloder4d-macos-publish
       apple-notary-profile: downloder4d-notarization
 
@@ -160,7 +160,7 @@ jobs:
         buildFiles/avatar_20082.jpg
       resource-artifact-name: release-metadata
       app-version: ${{ needs.prepare-release.outputs.version }}
-      application-name: Downloader4DWin
+      application-name: 4D_Downloader
       artifact-name: 4ddownloader-windows-publish
       output-directory: Publish
       targets: win-x64
