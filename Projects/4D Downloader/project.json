@@ -1,5 +1,5 @@
 {
-  "Version": 3,
+  "Version": 4,
   "Id": "3f9338f4-7192-4230-a3b5-865a77f18a97",
   "Name": "4D Downloader",
   "Type": "Desktop",
@@ -15,7 +15,8 @@
       "osx-x64"
     ],
     "IncludeODBCSupport": false,
-    "DefaultWindow": "Window1"
+    "WorkerProjectIds": [],
+    "DefaultWindow": ""
   },
   "Metadata": {
     "Identity": {
