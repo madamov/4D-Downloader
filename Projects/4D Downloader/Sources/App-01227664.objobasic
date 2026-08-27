@@ -62,4 +62,6 @@ End If
   Public Property Password4D As String
   Public Property fileList As JSONItem
   Public Shared Property filesDownloaded As Integer = 0
+  Sub openItem_Pressed()
+  End Sub
 End Class

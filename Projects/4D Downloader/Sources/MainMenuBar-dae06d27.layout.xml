@@ -1,10 +1,10 @@
 <MenuBar name="MainMenuBar">
   <Menu name="fileMenu" text="File">
-    <MenuItem name="newItem" text="New" shortcut="Ctrl+N" />
-    <MenuItem name="openItem" text="Open" shortcut="Ctrl+O" />
-    <MenuSeparator />
-    <MenuItem name="saveItem" text="Save" shortcut="Ctrl+S" />
-    <MenuItem name="saveAsItem" text="Save As" />
+    <MenuItem name="openItem" text="Open" shortcut="Ctrl+O">
+      <Handlers>
+        <Handler event="Pressed" ownerKind="App" ownerName="App" method="openItem_Pressed" />
+      </Handlers>
+    </MenuItem>
     <MenuSeparator />
     <MenuItem name="quitItem" text="Quit" shortcut="Cmd+Q" role="Quit" />
   </Menu>
