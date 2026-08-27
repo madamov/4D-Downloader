@@ -9,7 +9,4 @@
     <MenuItem name="quitItem" text="Quit" shortcut="Cmd+Q" role="Quit" />
   </Menu>
   <StandardEditMenu />
-  <Menu name="helpMenu" text="Help">
-    <MenuItem name="aboutItem" text="About" role="About" />
-  </Menu>
 </MenuBar>
