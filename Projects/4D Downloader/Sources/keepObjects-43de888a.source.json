@@ -1,0 +1,16 @@
+{
+  "Version": 4,
+  "Name": "keepObjects",
+  "Id": "43de888a-0cb5-432b-880d-c9652a6dec69",
+  "Kind": "Window",
+  "BuildScope": "Application",
+  "Namespace": "",
+  "Folder": "",
+  "ParentModule": "",
+  "ParentModuleId": "",
+  "AvailableInDesigner": false,
+  "CodeFile": "keepObjects-43de888a.objobasic",
+  "LayoutFile": "keepObjects-43de888a.layout.xml",
+  "Notes": [],
+  "InspectorBehaviour": []
+}

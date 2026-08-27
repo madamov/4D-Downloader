@@ -1,0 +1,6 @@
+<Window width="800" height="600" title="Window2" platform="macos">
+  <Button name="btnGoToHomePage" x="56" y="56" width="156" height="48" text="Products download" />
+  <Button name="btnFillCredentials" x="56" y="128" width="156" height="48" text="Fill credentials" />
+  <Button name="btnDownload" x="56" y="200" width="156" height="48" text="Download" />
+  <Button name="btnLogout" x="56" y="272" width="156" height="48" text="Logout" />
+</Window>
