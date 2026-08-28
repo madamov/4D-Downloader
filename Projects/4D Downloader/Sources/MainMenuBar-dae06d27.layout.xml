@@ -1,6 +1,6 @@
 <MenuBar name="MainMenuBar">
   <Menu name="fileMenu" text="File">
-    <MenuItem name="openItem" text="Open" shortcut="Ctrl+O">
+    <MenuItem name="newItem" text="New Downloader" shortcut="Ctrl+N">
       <Handlers>
         <Handler event="Pressed" ownerKind="App" ownerName="App" method="openItem_Pressed" />
       </Handlers>
