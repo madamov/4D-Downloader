@@ -1,24 +1,13 @@
 Class App Inherits DesktopApplication
 
   Event Opening(args() As String)
+If args.Count = 0 Then
+
+System.ErrorPrint("No command-line arguments were supplied.")
+
+Else
+
 Var parser As New CommandLineParser("Pass your 4D account and password.")
-
-
-@If DebugBuild Then
-
-Var myFile As FileSystemItem = New FileSystemItem("/Volumes/Radni/madamov/Documents_local/login_info.json")
-Var jsonString As String = myFile.ReadAllText()
-Var json As JSONItem = JSONItem.Parse(jsonString)
-
-Var password As String = json.Value("password").StringValue
-Var account As String = json.Value("account").StringValue
-Var fileList As JSONItem = json.Value("filelist")
-
-App.Account4D = account
-App.Password4D = password
-App.fileList = fileList
-
-@Else
 
 parser.AppVersion = Application.Version
 
@@ -55,7 +44,8 @@ System.Quit(1)
 
 End If
 
-@EndIf
+End If
+
 
   End Event
   Public Property Account4D As String
