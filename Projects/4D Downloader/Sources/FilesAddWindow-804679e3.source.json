@@ -1,0 +1,16 @@
+{
+  "Version": 4,
+  "Name": "FilesAddWindow",
+  "Id": "804679e3-9062-40c8-ad5f-bd0709d7feab",
+  "Kind": "Window",
+  "BuildScope": "Application",
+  "Namespace": "",
+  "Folder": "",
+  "ParentModule": "",
+  "ParentModuleId": "",
+  "AvailableInDesigner": false,
+  "CodeFile": "FilesAddWindow-804679e3.objobasic",
+  "LayoutFile": "FilesAddWindow-804679e3.layout.xml",
+  "Notes": [],
+  "InspectorBehaviour": []
+}

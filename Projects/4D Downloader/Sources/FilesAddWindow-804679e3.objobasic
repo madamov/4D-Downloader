@@ -1,0 +1,101 @@
+Public Class FilesAddWindow Inherits Window
+
+Sub AddButton_Pressed()
+Var RowSelected As Integer = SelectedRow()
+Var url As String = NewFileURL.Text.Trim()
+
+If (RowSelected < 0) Then
+
+Var rowValues As Array(Of String) = [url]
+Var row As Integer = fileListBox.AddRow(rowValues)
+
+fileListBox.SelectedRowIndex = row
+
+Else
+
+# Update value in listbox column
+
+fileListBox.SetCellText(RowSelected, 0, url)
+
+End If
+
+End Sub
+  Sub btnCancel_Pressed()
+Self.Close()
+
+  End Sub
+  Sub btnDoDownload_Pressed()
+If (fileListBox.RowCount = 0) Then
+App.MyAlert("No files added to list.", "File adding warning")
+Else
+
+Var files As New JSONItem(True)
+
+For row As Integer = 0 To fileListBox.RowCount - 1
+Var url As String = fileListBox.CellTextAt(row, 0).Trim()
+
+If url <> "" Then
+files.Append(url)
+End If
+Next row
+
+If files.Count = 0 Then
+App.MyAlert("Add at least one file URL.", "File list is empty")
+Return
+End If
+
+App.fileList = files
+App.filesDownloaded = 0
+
+Var downloaderWindow As New DownloaderWindow
+downloaderWindow.Show()
+
+Self.Close() # closing fileList window
+
+End If
+
+  End Sub
+Sub btnDelete_Pressed()
+# RemoveRow deletes one row. If multiple rows are selected, this demo
+# removes the first selected row to keep the example short.
+
+Var row As Integer = SelectedRow()
+If row < 0 Then Return
+
+fileListBox.RemoveRow(row)
+
+End Sub
+  Public Function SelectedRow() As Integer
+# A ListBox reports -1 when no row is selected.
+Var row As Integer = fileListBox.SelectedRowIndex
+If row < 0 Then Return -1
+If row >= fileListBox.RowCount Then Return -1
+
+Return row
+
+  End Function
+  Sub fileListBox_SelectionChanged()
+Var row As Integer = SelectedRow()
+
+If row < 0 Then
+
+NewFileURL.Text = ""
+
+AddButton.Text = "Add"
+
+Else
+
+Var cellText As String
+
+cellText = fileListBox.CellTextAt(row, 0)
+
+NewFileURL.Text = cellText
+
+AddButton.Text = "Update"
+
+End If
+
+
+
+  End Sub
+End Class

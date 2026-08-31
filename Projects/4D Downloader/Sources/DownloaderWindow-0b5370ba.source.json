@@ -1,6 +1,6 @@
 {
   "Version": 4,
-  "Name": "Window1",
+  "Name": "DownloaderWindow",
   "Id": "0b5370ba-3478-452c-a902-9b8dc42ccbc8",
   "Kind": "Window",
   "BuildScope": "Application",
@@ -9,8 +9,8 @@
   "ParentModule": "",
   "ParentModuleId": "",
   "AvailableInDesigner": false,
-  "CodeFile": "Window1-0b5370ba.objobasic",
-  "LayoutFile": "Window1-0b5370ba.layout.xml",
+  "CodeFile": "DownloaderWindow-0b5370ba.objobasic",
+  "LayoutFile": "DownloaderWindow-0b5370ba.layout.xml",
   "Notes": [],
   "InspectorBehaviour": []
 }

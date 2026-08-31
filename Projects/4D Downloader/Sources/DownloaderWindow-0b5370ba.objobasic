@@ -1,4 +1,4 @@
-Class Window1 Inherits Window
+Public Class DownloaderWindow Inherits Window
 
   Sub Browser_NavigationFinished(url As String, success As Boolean)
 Var js As String

@@ -1,19 +1,25 @@
 Class App Inherits DesktopApplication
 
   Event Opening(args() As String)
+
 If args.Count = 0 Then
+
+# started from GUI
 
 System.ErrorPrint("No command-line arguments were supplied.")
 
+App.openCredentialsDialog()
+
 Else
 
-Var parser As New CommandLineParser("Pass your 4D account and password.")
+Var parser As New CommandLineParser("Pass your 4D account and password and file list.")
 
 parser.AppVersion = Application.Version
 
 parser.AddStringOption("username", "u", "4D Account")
 parser.AddStringOption("password", "p", "Your 4D account password")
-parser.AddStringOption("filelist", "l", "JSON listing files to download")
+parser.AddStringOption("filelist", "l", "JSON collection of files to download")
+
 Var ok As Boolean = parser.Parse(args)
 
 If ok Then
@@ -25,13 +31,17 @@ Var password As String = parser.StringValue("password")
 App.Account4D = account
 App.Password4D = password
 
-
 Var jsonTxt As String = parser.StringValue("filelist")
 
 If jsonTxt.Length > 0 Then
 Print("Account " + account + " will download: " + jsonTxt)
 Var json As JSONItem = JSONItem.Parse(jsonTxt)
 App.fileList = json
+
+Var downloaderCLI As New DownloaderWindow
+
+downloaderCLI.Show()
+
 End If
 
 Else
@@ -46,12 +56,52 @@ End If
 
 End If
 
-
   End Event
   Public Property Account4D As String
   Public Property Password4D As String
   Public Property fileList As JSONItem
   Public Shared Property filesDownloaded As Integer = 0
-  Sub openItem_Pressed()
+  Public Shared Sub openCredentialsDialog()
+Var myWin As New CredentialsWindow
+
+myWin.Show()
+
+  End Sub
+  Public Sub menuOpenDownloader()
+If (App.Account4D <> "") And (App.Password4D <> "") Then
+
+# Open fil list window first, then open Downloader Window from a button in file list window
+
+Var fileListWindow As New FilesAddWindow
+
+fileListWindow.Show()
+
+Else
+
+Var msgBox As New MessageDialog
+
+msgBox.Message = "Account and/or password is empty. You need to enter them before opening downloader window."
+msgBox.Title = "Credentials Entry Alert"
+msgBox.ActionButtonCaption = "Understood"
+msgBox.Icon = MessageDialogIcon.Note
+msgBox.Show()
+
+App.openCredentialsDialog()
+
+End If
+
+  End Sub
+  Sub newItem_Pressed()
+menuOpenDownloader()
+
+  End Sub
+  Public Sub MyAlert(msg As String, title As String)
+Var msgBox As New MessageDialog
+
+msgBox.Title = title
+msgBox.ActionButtonCaption = "OK"
+msgBox.Message = msg
+msgBox.Show()
+
   End Sub
 End Class

@@ -1,8 +1,8 @@
 <MenuBar name="MainMenuBar">
   <Menu name="fileMenu" text="File">
-    <MenuItem name="newItem" text="New Downloader" shortcut="Ctrl+N">
+    <MenuItem name="newItem" text="New Downloader Window" shortcut="Ctrl+N">
       <Handlers>
-        <Handler event="Pressed" ownerKind="App" ownerName="App" method="openItem_Pressed" />
+        <Handler event="Pressed" ownerKind="App" ownerName="App" method="newItem_Pressed" />
       </Handlers>
     </MenuItem>
     <MenuSeparator />

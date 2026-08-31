@@ -1,0 +1,8 @@
+<Window width="800" height="500" title="Add links to files to download" platform="macos">
+  <ListBox name="fileListBox" x="20" y="20" width="752" height="424" lockRight="true" lockBottom="true" columnCount="1" frozenColumnCount="1" gridLinesVisible="true" columnSortable="true" initialColumns="File URL" columnTextAlignments="1" />
+  <Button name="AddButton" x="20" y="454" width="72" height="32" text="Add" lockLeft="false" lockTop="false" lockRight="true" lockBottom="true" />
+  <Button name="btnDoDownload" x="691" y="454" width="80" height="30" text="Download files" />
+  <Button name="btnCancel" x="592" y="454" width="80" height="30" text="Cancel" />
+  <Button name="btnDelete" x="464" y="454" width="98" height="32" text="Delete" lockLeft="false" lockTop="false" lockRight="true" lockBottom="true" />
+  <TextField name="NewFileURL" x="109" y="454" width="344" height="32" text="" placeholderText="Type or paste URL" lockTop="false" lockRight="true" lockBottom="true" />
+</Window>
