@@ -80,7 +80,13 @@ If App.filesDownloaded >= App.fileList.Count Then
 Var url As String
 url="https://account.4d.com/4DACTION/webAccount_Logout?returnURL=https%3A//product-download.4d.com/user/logout"
 Browser.LoadURL(url)
+If (App.inGUI) Then
+# in GUI, just close Window
+Self.Close()
+App.MyAlert("Files downloaded to Downloads folder", "Download status inforamtion")
+Else
 System.Quit()
+End If
 Else
 # continue downloading next file in a list
 Browser.LoadURL("https://product-download.4d.com")

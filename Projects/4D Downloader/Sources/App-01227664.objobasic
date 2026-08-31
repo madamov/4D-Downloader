@@ -6,6 +6,8 @@ If args.Count = 0 Then
 
 # started from GUI
 
+App.inGUI = True
+
 System.ErrorPrint("No command-line arguments were supplied.")
 
 App.openCredentialsDialog()
@@ -104,4 +106,5 @@ msgBox.Message = msg
 msgBox.Show()
 
   End Sub
+  Public Property inGUI As Boolean = False
 End Class
