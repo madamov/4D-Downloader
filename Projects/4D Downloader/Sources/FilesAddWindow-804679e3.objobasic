@@ -80,21 +80,71 @@ Var row As Integer = SelectedRow()
 If row < 0 Then
 
 NewFileURL.Text = ""
-
 AddButton.Text = "Add"
+btnDelete.Enabled = False
 
 Else
 
 Var cellText As String
 
 cellText = fileListBox.CellTextAt(row, 0)
-
 NewFileURL.Text = cellText
 
 AddButton.Text = "Update"
+btnDelete.Enabled = True
 
 End If
 
+
+
+  End Sub
+  Sub fileListBox_Opening()
+btnDelete.Enabled = False
+
+  End Sub
+  Sub btnSaveList_Pressed()
+If (fileListBox.RowCount = 0) Then
+App.MyAlert("No files added to list.", "File adding warning")
+Else
+
+Var files As New JSONItem(True)
+
+For row As Integer = 0 To fileListBox.RowCount - 1
+Var url As String = fileListBox.CellTextAt(row, 0).Trim()
+
+If url <> "" Then
+files.Append(url)
+End If
+Next row
+
+If files.Count = 0 Then
+App.MyAlert("Add at least one file URL.", "File list is empty")
+Return
+End If
+
+# save file here
+
+Var dlg As New SaveFileDialog
+dlg.Title = "Save file list as JSON"
+dlg.SuggestedFileName = "Untitled"
+dlg.DefaultExtension = "json"
+dlg.AddFilter("JSON files", "*.json")
+
+Var path As String = dlg.Show()
+
+If (path <> "") Then
+
+Var jsonText As String = files.ToFormattedString()
+Var file As FileSystemItem = New FileSystemItem(path)
+Var stream As New TextStream(file, TextEncoding.UTF8)
+
+stream.WriteLine(jsonText)
+
+stream.Close()
+
+End If
+
+End If
 
 
   End Sub
