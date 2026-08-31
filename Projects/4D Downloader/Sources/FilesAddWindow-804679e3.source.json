@@ -1,16 +1,16 @@
 {
   "Version": 4,
-  "Name": "App",
-  "Id": "01227664-ed14-4503-aeb5-7920d94788ed",
-  "Kind": "Class",
+  "Name": "FilesAddWindow",
+  "Id": "804679e3-9062-40c8-ad5f-bd0709d7feab",
+  "Kind": "Window",
   "BuildScope": "Application",
   "Namespace": "",
   "Folder": "",
   "ParentModule": "",
   "ParentModuleId": "",
   "AvailableInDesigner": false,
-  "CodeFile": "App-01227664.objobasic",
-  "LayoutFile": "",
+  "CodeFile": "FilesAddWindow-804679e3.objobasic",
+  "LayoutFile": "FilesAddWindow-804679e3.layout.xml",
   "Notes": [],
   "InspectorBehaviour": []
 }

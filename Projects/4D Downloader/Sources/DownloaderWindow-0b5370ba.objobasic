@@ -1,49 +1,5 @@
-Class Window1 Inherits Window
+Public Class DownloaderWindow Inherits Window
 
-  Sub btnGoToHomePage_MouseDown(x As Double, y As Double, button As MouseButton)
-
-
-# Browser.LoadURL("https://samplelib.com/sample-docx.html")
-
-Browser.LoadURL("https://product-download.4d.com")
-  End Sub
-  Sub btnFillCredentials_MouseDown(x As Double, y As Double, button As MouseButton)
-Var js As String
-
-# fill email field
-js = "emailInput = document.getElementById('store2018_login_email');"
-js = js + "emailInput.value = '" + App.Account4D + "';"
-Browser.ExecuteJavaScript(js)
-
-#fill password field
-js = "passwordInput = document.getElementById('store2018_login_password');"
-js = js + "passwordInput.value = '" + App.Password4D + "';"
-Browser.ExecuteJavaScript(js)
-
-#click on Login button
-js = "loginButton = document.getElementById('store2018_login_btnLogin'); loginButton.click();"
-Browser.ExecuteJavaScript(js)
-
-Var loginLink As String = "https://account.4d.com/4DACTION/webAccount_Login?lang=en&returnURL=https%3A//product-download.4d.com/"
-
-  End Sub
-  Sub btnDownload_MouseDown(x As Double, y As Double, button As MouseButton)
-
-Var js As String
-
-
-
-# js = "const a = document.createElement('a'); a.href = 'https://product-download.4d.com/release/20.x/20.6/101680/mac/tool4d_x86_64.tar.xz'; a.click();"
-
-
-# js = "const a = document.createElement('a'); a.href = 'https://product-download.4d.com/release/21.x/21.1/100547/win/4D%2021.1%20LTS%20Windows.exe'; a.click();"
-
-js = "const a = document.createElement('a'); a.href = 'https://product-download.4d.com/release/21%20Rx/21%20R4/100117/win/4D%20ODBC%20Driver%2021%20R4%20Windows.exe'; a.click();"
-
-Browser.ExecuteJavaScript(js)
-
-
-  End Sub
   Sub Browser_NavigationFinished(url As String, success As Boolean)
 Var js As String
 
@@ -124,7 +80,13 @@ If App.filesDownloaded >= App.fileList.Count Then
 Var url As String
 url="https://account.4d.com/4DACTION/webAccount_Logout?returnURL=https%3A//product-download.4d.com/user/logout"
 Browser.LoadURL(url)
+If (App.inGUI) Then
+# in GUI, just close Window
+Self.Close()
+App.MyAlert("Files downloaded to Downloads folder", "Download status inforamtion")
+Else
 System.Quit()
+End If
 Else
 # continue downloading next file in a list
 Browser.LoadURL("https://product-download.4d.com")
@@ -160,14 +122,6 @@ Status.Text = download.SuggestedFileName + ": " + download.BytesReceived.ToStrin
 End If
 
 print(Status.Text)
-
-  End Sub
-  Sub btnLogout_MouseDown(x As Double, y As Double, button As MouseButton)
-Var url As String
-
-url="https://account.4d.com/4DACTION/webAccount_Logout?returnURL=https%3A//product-download.4d.com/user/logout"
-
-Browser.LoadURL(url)
 
   End Sub
   Public Sub getFileAtIndex(idx As Integer)

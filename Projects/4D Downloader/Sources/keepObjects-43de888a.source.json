@@ -1,7 +1,7 @@
 {
-  "Version": 3,
-  "Name": "Window1",
-  "Id": "0b5370ba-3478-452c-a902-9b8dc42ccbc8",
+  "Version": 4,
+  "Name": "keepObjects",
+  "Id": "43de888a-0cb5-432b-880d-c9652a6dec69",
   "Kind": "Window",
   "BuildScope": "Application",
   "Namespace": "",
@@ -9,8 +9,8 @@
   "ParentModule": "",
   "ParentModuleId": "",
   "AvailableInDesigner": false,
-  "CodeFile": "Window1-0b5370ba.objobasic",
-  "LayoutFile": "Window1-0b5370ba.layout.xml",
+  "CodeFile": "keepObjects-43de888a.objobasic",
+  "LayoutFile": "keepObjects-43de888a.layout.xml",
   "Notes": [],
   "InspectorBehaviour": []
 }
