@@ -10,9 +10,7 @@
     "PatchVersion": 1,
     "CommandLineArgs": "--username --password",
     "TargetRids": [
-      "win-x64",
-      "osx-arm64",
-      "osx-x64"
+      "osx-arm64"
     ],
     "IncludeODBCSupport": false,
     "WorkerProjectIds": [],
