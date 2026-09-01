@@ -124,7 +124,7 @@ jobs:
 
   publish-macos:
     needs: prepare-release
-    uses: madamov/ObjoPublisher/.github/workflows/publish_objo_macos.yml@22-add-input-to-publishing-workflows-to-cope-set-of-files-into-resourcesfiles-folder
+    uses: madamov/ObjoPublisher/.github/workflows/publish_objo_macos.yml@v1
     
     with:
       solution-file: 4D Downloader.objosln
@@ -151,7 +151,7 @@ jobs:
     needs:
       - prepare-release
       - publish-macos
-    uses: madamov/ObjoPublisher/.github/workflows/publish_objo_windows.yml@22-add-input-to-publishing-workflows-to-cope-set-of-files-into-resourcesfiles-folder
+    uses: madamov/ObjoPublisher/.github/workflows/publish_objo_windows.yml@v1
     with:
       solution-file: "4D Downloader.objosln"
       project-file: "Projects/4D Downloader/project.json"
