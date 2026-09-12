@@ -32,8 +32,6 @@ jobs:
         run: |
           set -euo pipefail
 
-          project_file="Projects/4D Downloader/project.json"
-
           gh release list \
             --exclude-drafts \
             --exclude-pre-releases \
@@ -60,9 +58,14 @@ jobs:
           if [[ -z "$previous_tag" ]]; then
             version="1.0.0"
           else
-            major="$(jq -er '.BuildSettings.MajorVersion | numbers' "$project_file")"
-            minor="$(jq -er '.BuildSettings.MinorVersion | numbers' "$project_file")"
-            patch="$(jq -er '.BuildSettings.PatchVersion | numbers' "$project_file")"
+            if [[ "$previous_tag" =~ ^v?([0-9]+)\.([0-9]+)\.([0-9]+)$ ]]; then
+              major="${BASH_REMATCH[1]}"
+              minor="${BASH_REMATCH[2]}"
+              patch="${BASH_REMATCH[3]}"
+            else
+              echo "Unsupported release tag format: $previous_tag (expected vMAJOR.MINOR.PATCH)" >&2
+              exit 1
+            fi
 
             if jq -e '
               any(
